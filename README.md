@@ -65,8 +65,16 @@ Dans cette première partie, vous allez analyser [une connexion WPA Entreprise](
 	- Authentification interne et transmission de la clé WPA (échange chiffré, vu comme « Application data »)
 	- 4-way handshake
 
+### Comparaison entre l'authentification en théorie et en pratique
+
+En théorie l'authentification à l'aide de WPA Entreprise se passe comme suit:
+
+![Diagramme Authentification WPA Entreprise](images/)
+
+
+
 ### Répondez aux questions suivantes :
- 
+
 > **_Question :_** Quelle ou quelles méthode(s) d’authentification est/sont proposé(s) au client ?
 > 
 > **_Réponse :_** 
