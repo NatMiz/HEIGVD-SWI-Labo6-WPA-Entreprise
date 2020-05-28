@@ -12,6 +12,8 @@
 
 __A faire en équipes de deux personnes__
 
+**Étudiants:** Stefan Dejanovic, Nathanaël Mizutani
+
 ### Objectif :
 
 1.	Analyser les étapes d’une connexion WPA Entreprise avec une capture Wireshark
@@ -69,7 +71,29 @@ Dans cette première partie, vous allez analyser [une connexion WPA Entreprise](
 
 En théorie l'authentification à l'aide de WPA Entreprise se passe comme suit:
 
-![Diagramme Authentification WPA Entreprise](images/)
+![Diagramme Authentification WPA Entreprise](images/WPA_AuthentificationDiagr.png)
+
+**Dans la capture on observe les échanges suivants:**
+
+![Authentification WPA Entreprise dans la pcap](images/WPA_PcapFull.png)
+
+En appliquant le filtre `((wlan.da == dc:a5:f4:60:bf:50) && (wlan.sa == 30:74:96:70:df:32)) || ((wlan.sa == dc:a5:f4:60:bf:50) && (wlan.da == 30:74:96:70:df:32))`, on isole l'authentification WPA Entreprise entre la station Huawei et l'AP Cisco.
+
+#### Étapes de l'authentification WPA Entreprise
+
+*Requête et réponse d’authentification système ouvert*
+
+![Authentification Système Ouvert](images/OpenSystem_Auth.png)
+
+On peut voir dans la capture ci-dessus une authentification Système Ouvert.
+
+*Requête et réponse de réassociation*
+
+![Requête et réponse de réassociation](images/ReassociationRequestResponse.png)
+
+On voit ici une demande de réassociation de `HuaweiTe_70:df:32` vers `Cisco_60:bf:50`.
+
+*Négociation de la méthode d’authentification entreprise*
 
 
 
