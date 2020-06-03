@@ -81,6 +81,8 @@ En appliquant le filtre `((wlan.da == dc:a5:f4:60:bf:50) && (wlan.sa == 30:74:96
 
 #### Étapes de l'authentification WPA Entreprise
 
+Dans la capture on a, dans l'ordre:
+
 *Requête et réponse d’authentification système ouvert*
 
 ![Authentification Système Ouvert](images/OpenSystem_Auth.png)
@@ -93,34 +95,115 @@ On peut voir dans la capture ci-dessus une authentification Système Ouvert.
 
 On voit ici une demande de réassociation de `HuaweiTe_70:df:32` vers `Cisco_60:bf:50`.
 
+*Demande d'identité*
+
+![Identification](images/identityReqRep.png)
+
+On constate qu'une fois la demande de réassociation acceptée le serveur demande au client de s'identifier. On peut d'ailleurs voir l'identité du client dans sa réponse:
+
+![identité client](images/clientIdentity.png)
+
 *Négociation de la méthode d’authentification entreprise*
+
+![Négaciation du type d'EAP](images/EAPDemand.png)
+
+*Négociation de la suite cryptographique a utiliser et échange de certificats*
+
+![Client Hello](images/cypherSuiteNegociation.png)
+
+Dans son message `Client Hello`, le client envoie:
+
+- l'ID de session:
+
+  ![ID session](images/sessionId.png)
+
+- Son nonce:
+
+  ![Nonce client](images/clientNonce.png)
+
+- Les suites cryptographiques qu'il supporte:
+
+  ![Suites cryptographiques client](images/clientCipherSuites.png)
+
+- Les algorithmes de signatures qu'il supporte:
+
+  ![Algorithmes de signature client](images/clientSignAlg.png)
+
+- Les courbes elliptiques qu'il supporte:
+
+  ![Courbes elliptiques client](images/clientEC.png)
+
+  Par contre le client ne donne aucune méthode de compression:
+
+  ![Méthode de compression](images/clientComprMethod.png)
+
+Le serveur fournit ses certificats au client avec son message `Serveur Hello`. Il indique aussi la suite cryptographique sélectionnée, son nonce, la méthode de compression et l'id de session:
+
+![Server Hello](images/serverHello.png)
+
+*Ouverture du tunnel TLS*
+
+Le message `Change Cipher Spec` indique le passage à une communication chiffrée à l'aide de l'algorithme précédemment négocié.
+
+![Ouverture du tunnel TLS](images/TLSTunnelOpening.png)
+
+*Authentification interne, Dérivation de la clef WPA, Transfert de la clef*
+
+La communication étant chiffrée, Wireshark ne peut pas en lire le contenu.
+
+![Échange chiffré dans un tunnel TLS](images/TLSCommunication.png)
+
+*Confirmation de conformité et de fin d'authentification*
+
+Le message `Success` indique que l'authentification, ainsi que la dérivation et le transfert de la clef se sont bien passés.
+
+![Fermeture du tunnel TLS](images/TLSTunnelClosing.png)
+
+*4-way Handshake*
+
+![4-way handshake](images/4WayHandshake.png)
 
 
 
 ### Répondez aux questions suivantes :
 
 > **_Question :_** Quelle ou quelles méthode(s) d’authentification est/sont proposé(s) au client ?
-> 
-> **_Réponse :_** 
+>
+> **_Réponse :_** Le serveur propose la méthode d'authentification EAP-TLS au client.
+>
+> ![PEAP](images/proposedAuthServeur.png)
 
 ---
 
 > **_Question:_** Quelle méthode d’authentification est finalement utilisée ?
-> 
-> **_Réponse:_** 
+>
+> **_Réponse:_** La méthode EAP-PEAP est finalement utilisée. Il s'agit de celle proposée par le client.
+>
+> Proposition du client:
+>
+> ![PEAP proposition](images/proposedAuthClient.png)
+>
+> Acceptation du serveur:
+>
+> ![PEAP accepté](images/authAccept.png)
 
 ---
 
 > **_Question:_** Lors de l’échange de certificats entre le serveur d’authentification et le client :
-> 
+>
 > - a. Le serveur envoie-t-il un certificat au client ? Pourquoi oui ou non ?
-> 
-> **_Réponse:_**
-> 
+>
+> **_Réponse:_** Le serveur envoie plusieurs certificats au client. Cela permet au client de l'authentifier.
+>
+> Les certificats envoyés par le serveur:
+>
+> ![Certificats envoyés](images/serverCertificates.png)
+>
 > - b. Le client envoie-t-il un certificat au serveur ? Pourquoi oui ou non ?
-> 
-> **_Réponse:_**
-> 
+>
+> **_Réponse:_** Le client n'envoie pas de certificat au serveur car la méthode d'authentification utilisée est EAP-PEAP. Le client n'envoie de certificats que dans le cas où EAP-TLS est utilisé.
+>
+> Avec EAP-PEAP, le client s'authentifie durant la phase d'authentification interne.
 
 ---
 
