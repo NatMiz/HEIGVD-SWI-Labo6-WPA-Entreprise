@@ -193,7 +193,7 @@ Le message `Success` indique que l'authentification, ainsi que la dérivation et
 >
 > - a. Le serveur envoie-t-il un certificat au client ? Pourquoi oui ou non ?
 >
-> **_Réponse:_** Le serveur envoie plusieurs certificats au client. Cela permet au client de l'authentifier.
+> **_Réponse:_** Le serveur envoie plusieurs certificats au client, ainsi que sa clef publique. Cela permet au client de l'authentifier.
 >
 > Les certificats envoyés par le serveur:
 >
